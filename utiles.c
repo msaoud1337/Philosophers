@@ -1,6 +1,19 @@
 
 #include "header.h"
 
+void	ft_error(int i)
+{
+	if (i == 0)
+		printf("check arguments !!!\n");
+	if (i == 1)
+		printf("allocation failed !!!\n");
+	if (i == 3)
+		printf("thread creation failed !!!\n");
+	if (i == 4)
+		printf("mutex failed !!!\n");
+	exit(0);
+}
+
 int	ft_atoi(const char *str)
 {
 	int	i;
