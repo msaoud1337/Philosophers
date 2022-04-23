@@ -6,12 +6,11 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 16:05:14 by msaoud            #+#    #+#             */
-/*   Updated: 2022/04/20 01:23:41 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/04/23 06:26:28 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
 
 void	ft_mutex_init(t_data *data)
 {
@@ -23,12 +22,15 @@ void	ft_mutex_init(t_data *data)
 		if (pthread_mutex_init(&data->forks[i], NULL))
 			ft_error(4);
 	}
-		printf("%d",i);
+	printf("%d",i);
 }
 
-void	*test()
+void	*test(void	*param)
 {
-	printf("salam\n");
+	t_data *data;
+
+	data = param;
+	printf("\nstart time >> %lld**",data->start_time);
 	return 0;
 }
 
@@ -43,8 +45,9 @@ void	ft_philo_init(t_data *data)
 		data->philo_tab[i].ate = 0;
 		data->philo_tab[i].left_fork = i;
 		data->philo_tab[i].right_fork = (i + 1) % data->all_philo;
-		if (pthread_create(&data->philo_tab[i].philo_thread, NULL, &test, NULL))
+		if (pthread_create(&data->philo_tab[i].philo_thread, NULL, &test, (void *)data))
 			ft_error(3);
+		sleep(1);
 	}
 }
 
@@ -63,6 +66,8 @@ void	pars(char **arv, t_data *data)
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->all_philo);
 	if (!data->forks)
 		ft_error(1);
+	data->start_time = gettime();
+	printf("data->start %lld\n",data->start_time);
 }
 
 int main(int arc, char **arv)
@@ -74,4 +79,5 @@ int main(int arc, char **arv)
 	pars(arv, &data);
 	ft_mutex_init(&data);
 	ft_philo_init(&data);
+	printf("data->start %lld\n",data.start_time);
 }

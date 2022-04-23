@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 typedef struct s_philosofers
 {
@@ -25,10 +27,12 @@ typedef struct s_data
 	int						time_to_eat;
 	int						time_to_sleep;
 	int 					each_time_toeat;
+	long long				start_time;
+	long long				last_time;
 	pthread_mutex_t			*forks;
 	struct s_philosofers	*philo_tab;
 }	t_data;
 void	ft_error(int i);
 int		ft_atoi(const char *str);
-
+long long	gettime();
 # endif
