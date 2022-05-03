@@ -6,32 +6,29 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 16:05:14 by msaoud            #+#    #+#             */
-/*   Updated: 2022/04/23 06:26:28 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/03 10:38:59 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void	ft_mutex_init(t_data *data)
-{
-	int i;
 
-	i = -1;
-	while (++i < data->all_philo)
+void	*philosofers(void	*param)
+{
+	t_philosofers	*philo;
+	t_data			*data;
+
+	philo = param;
+	data = philo->rules;
+	while (data->alive)
 	{
-		if (pthread_mutex_init(&data->forks[i], NULL))
-			ft_error(4);
+		pthread_mutex_lock(&data->forks[philo->right_fork]);
+		printf("");
+		pthread_mutex_lock(&data->forks[philo->left_fork]);
+		
 	}
-	printf("%d",i);
-}
-
-void	*test(void	*param)
-{
-	t_data *data;
-
-	data = param;
-	printf("\nstart time >> %lld**",data->start_time);
-	return 0;
+	printf("\nphilo s number >> %d",philo->philo_number + 1);
+	return (0);
 }
 
 void	ft_philo_init(t_data *data)
@@ -45,9 +42,23 @@ void	ft_philo_init(t_data *data)
 		data->philo_tab[i].ate = 0;
 		data->philo_tab[i].left_fork = i;
 		data->philo_tab[i].right_fork = (i + 1) % data->all_philo;
-		if (pthread_create(&data->philo_tab[i].philo_thread, NULL, &test, (void *)data))
+		data->philo_tab[i].rules = data;
+		if (pthread_create(&data->philo_tab[i].philo_thread, NULL, &philosofers, (void *)&data->philo_tab[i]))
 			ft_error(3);
-		sleep(1);
+		usleep(10000);
+		data->philo_tab[i].start_time = gettime();
+	}
+}
+
+void	ft_mutex_init(t_data *data)
+{
+	int i;
+
+	i = -1;
+	while (++i < data->all_philo)
+	{
+		if (pthread_mutex_init(&data->forks[i], NULL))
+			ft_error(4);
 	}
 }
 
@@ -67,7 +78,7 @@ void	pars(char **arv, t_data *data)
 	if (!data->forks)
 		ft_error(1);
 	data->start_time = gettime();
-	printf("data->start %lld\n",data->start_time);
+	data->alive = 1;
 }
 
 int main(int arc, char **arv)
@@ -79,5 +90,4 @@ int main(int arc, char **arv)
 	pars(arv, &data);
 	ft_mutex_init(&data);
 	ft_philo_init(&data);
-	printf("data->start %lld\n",data.start_time);
 }

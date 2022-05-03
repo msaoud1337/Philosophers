@@ -11,13 +11,14 @@
 
 typedef struct s_philosofers
 {
-	int 		philo_number;
-	int 		ate;
-	int 		left_fork;
-	int 		right_fork;
-	long long 	time_to_die;
-	pthread_t	philo_thread;
-	long long 	start_time;
+	int 				philo_number;
+	int 				ate;
+	int 				left_fork;
+	int 				right_fork;
+	long long 			time_to_die;
+	pthread_t			philo_thread;
+	long long 			start_time;
+	struct s_data		*rules;
 } t_philosofers;
 
 typedef struct s_data
@@ -29,6 +30,7 @@ typedef struct s_data
 	int 					each_time_toeat;
 	long long				start_time;
 	long long				last_time;
+	int						alive;
 	pthread_mutex_t			*forks;
 	struct s_philosofers	*philo_tab;
 }	t_data;

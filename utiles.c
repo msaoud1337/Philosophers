@@ -1,6 +1,10 @@
-
 #include "header.h"
 
+void	action(int philo_id, t_data *data)
+{
+	printf("%d %d %s",gettime - data->start_time, );
+
+}
 void	ft_error(int i)
 {
 	if (i == 0)

@@ -12,15 +12,3 @@ long long	gettime()
 	time += curr_time.tv_usec / 1000;
 	return (time);
 }
-
-int main()
-{
-	long long			time;
-
-	time = gettime();
-	while (1)
-	{
-		printf("%lld\n",gettime() - time);
-		usleep((200 * 1000) - 1);
-	}
-}
