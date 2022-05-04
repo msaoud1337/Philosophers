@@ -16,19 +16,22 @@
 void	*philosofers(void	*param)
 {
 	t_philosofers	*philo;
-	t_data			*data;
+	// t_data			*data;
 
 	philo = param;
-	data = philo->rules;
-	while (data->alive)
-	{
-		pthread_mutex_lock(&data->forks[philo->right_fork]);
-		printf("");
-		pthread_mutex_lock(&data->forks[philo->left_fork]);
+	// data = philo->rules;
+	if (philo->philo_number % 2)
+		usleep(1000);
+	// while (data->alive)
+	// {
+	// 	pthread_mutex_lock(&data->forks[philo->right_fork]);
+	// 	action(philo->philo_number, philo->start_time, "has taken a fork");
+	// 	pthread_mutex_lock(&data->forks[philo->left_fork]);
+	// 	action(philo->philo_number, philo->start_time, "has taken a fork");
+
 		
-	}
+	// }
 	printf("\nphilo s number >> %d",philo->philo_number + 1);
-	return (0);
 }
 
 void	ft_philo_init(t_data *data)
@@ -45,7 +48,7 @@ void	ft_philo_init(t_data *data)
 		data->philo_tab[i].rules = data;
 		if (pthread_create(&data->philo_tab[i].philo_thread, NULL, &philosofers, (void *)&data->philo_tab[i]))
 			ft_error(3);
-		usleep(10000);
+		// usleep(10000);
 		data->philo_tab[i].start_time = gettime();
 	}
 }

@@ -1,10 +1,10 @@
 #include "header.h"
 
-void	action(int philo_id, t_data *data)
+void	action(int philo_id, long long time, char *action)
 {
-	printf("%d %d %s",gettime - data->start_time, );
-
+	printf("%lld %d %s\n", gettime() - time, philo_id + 1, action);
 }
+
 void	ft_error(int i)
 {
 	if (i == 0)
