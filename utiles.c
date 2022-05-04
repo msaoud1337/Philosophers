@@ -1,5 +1,10 @@
 #include "header.h"
 
+long long	calcule_time(long long n,long long s)
+{
+	return (n - s);	
+}
+
 void	action(int philo_id, long long time, char *action)
 {
 	printf("%lld %d %s\n", gettime() - time, philo_id + 1, action);

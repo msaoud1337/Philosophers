@@ -18,7 +18,8 @@ typedef struct s_philosofers
 	long long 			time_to_die;
 	pthread_t			philo_thread;
 	long long 			start_time;
-	struct s_data		*rules;
+	long long			last_meal;
+	struct s_data		*data;
 } t_philosofers;
 
 typedef struct s_data
@@ -34,7 +35,12 @@ typedef struct s_data
 	pthread_mutex_t			*forks;
 	struct s_philosofers	*philo_tab;
 }	t_data;
+
+long long	calcule_time(long long n,long long s);
+void	action(int philo_id, long long time, char *action);
 void	ft_error(int i);
 int		ft_atoi(const char *str);
 long long	gettime();
+void    philo_eating(t_data *data);
+
 # endif
