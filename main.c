@@ -6,7 +6,7 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 16:05:14 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/04 13:48:14 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/05 15:32:18 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,15 @@ void	eat(t_philosofers *philo)
 	t_data *data;
 
 	data = philo->data;
-	pthread_mutex_lock(&data->forks[philo->right_fork]);
+	printf("***%d|| %d %d\n",pthread_mutex_lock(&data->forks[philo->right_fork]), philo->left_fork ,philo->right_fork);
+		// printf("mutex succes\n");
+	printf("print ***%d\n",pthread_mutex_lock(&data->print));
 	action(philo->philo_number, philo->start_time, "has taken a fork");
 	pthread_mutex_lock(&data->forks[philo->left_fork]);
 	action(philo->philo_number, philo->start_time, "has taken a fork");
 	action(philo->philo_number, philo->start_time, "is eating");
-	philo_eating(data);
+	philo_mouve(data->time_to_eat);
+	pthread_mutex_unlock(&data->print);
 	philo->last_meal = gettime();
 	pthread_mutex_unlock(&data->forks[philo->right_fork]);
 	pthread_mutex_unlock(&data->forks[philo->left_fork]);
@@ -36,12 +39,15 @@ void	*philosofers(void	*param)
 	philo = param;
 	data = philo->data;
 	if (philo->philo_number % 2)
-		usleep(1000);
+		usleep(100);
 	while (data->alive)
 	{
 		eat(philo);
+		check_death(philo);
+		philo_mouve(data->time_to_sleep);
+		action(philo->philo_number, philo->start_time, "is sleeping");
+		action(philo->philo_number, philo->start_time, "is thinking");
 	}
-	printf("\nphilo s number >> %d",philo->philo_number + 1);
 	return (0);
 }
 
@@ -100,9 +106,9 @@ void	pars(char **arv, t_data *data)
 	data->philo_tab = malloc(sizeof(t_philosofers) * data->all_philo);
 	if (!data->philo_tab)
 		ft_error(1);
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->all_philo);
-	if (!data->forks)
-		ft_error(1);
+	// data->forks = malloc(sizeof(pthread_mutex_t) * data->all_philo);
+	// if (!data->forks)
+	// 	ft_error(1);
 	data->start_time = gettime();
 	data->alive = 1;
 }

@@ -32,7 +32,10 @@ typedef struct s_data
 	long long				start_time;
 	long long				last_time;
 	int						alive;
-	pthread_mutex_t			*forks;
+	pthread_mutex_t			forks[1];
+	pthread_mutex_t			print;
+	pthread_mutex_t			dead;
+
 	struct s_philosofers	*philo_tab;
 }	t_data;
 
@@ -41,6 +44,8 @@ void	action(int philo_id, long long time, char *action);
 void	ft_error(int i);
 int		ft_atoi(const char *str);
 long long	gettime();
-void    philo_eating(t_data *data);
+void    philo_mouve(int time);
+void	philo_dead(t_philosofers *philo);
+int		check_death(t_philosofers *philo);
 
 # endif
