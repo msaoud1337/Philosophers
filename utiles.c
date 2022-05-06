@@ -1,13 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utiles.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/06 13:43:30 by msaoud            #+#    #+#             */
+/*   Updated: 2022/05/06 15:11:48 by msaoud           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
-long long	calcule_time(long long n,long long s)
+long long	calcule_time(long long n, long long s)
 {
-	return (n - s);	
+	return (n - s);
 }
 
-void	action(int philo_id, long long time, char *action)
+void	action(int philo_id, long long time, char *action, t_data *data)
 {
+	pthread_mutex_lock(&data->print);
 	printf("%lld %d %s\n", gettime() - time, philo_id + 1, action);
+	pthread_mutex_unlock(&data->print);
 }
 
 void	ft_error(int i)
@@ -48,9 +62,9 @@ int	ft_atoi(const char *str)
 	return (r * signe);
 }
 
-long long	gettime()
+long long	gettime(void)
 {
-	long long time;
+	long long		time;
 	struct timeval	curr_time;
 
 	gettimeofday(&curr_time, NULL);
