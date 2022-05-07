@@ -6,39 +6,46 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 13:41:33 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/06 16:19:35 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/07 19:13:08 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void	philo_mouve(int time)
+void	philo_mouve(int time, t_philosofers *philo, int stats)
 {
 	long long	start;
 
 	start = gettime();
+	if (stats == 1)
+	{
+		philo->last_meal = gettime();
+		philo->is_eating = 1;
+	}
 	while (1)
 	{
-		if ((gettime() - start) >= time)
+		if ((gettime() - start) > time)
 			break ;
 	}
+	if (stats == 1)
+		philo->is_eating = 0;
 }
 
-void	ft_arv5(t_data *data)
+int	ft_arv5(t_data *data)
 {
 	if (data->arc == 6)
 	{
 		if (data->all_ate == (data->each_time_toeat * data->all_philo))
 		{
-			printf("data->all_ate %d\n", data->all_ate);
 			pthread_mutex_lock(&data->dead);
 			pthread_mutex_lock(&data->print);
 			printf("each philosopher ate at least %d", data->each_time_toeat);
-			exit(0);
+			return (0);
 			pthread_mutex_unlock(&data->dead);
 			pthread_mutex_unlock(&data->print);
 		}
 	}
+	return (1);
 }
 
 void	*checkingfordeath(void	*arg)
@@ -46,23 +53,25 @@ void	*checkingfordeath(void	*arg)
 	t_data	*data;
 	int		i;
 
-	i = -1;
 	data = arg;
 	while (1)
 	{
 		i = -1;
-		while (++i < data->all_philo)
+		while (++i < data->all_philo && data->alive)
 		{
-			ft_arv5(data);
-			if (gettime() - data->philo_tab[i].last_meal > data->time_to_die)
+			if (!ft_arv5(data))
+				return (0);
+			if (data->philo_tab[i].is_eating == 0)
 			{
-				pthread_mutex_lock(&data->dead);
-				pthread_mutex_lock(&data->print);
-				printf("%lld %d %s\n", gettime() - data->start_time,
-					data->philo_tab[i].philo_number + 1, "died");
-				exit(0);
-				pthread_mutex_unlock(&data->dead);
-				pthread_mutex_unlock(&data->print);
+				if (gettime() - data->philo_tab[i].last_meal
+					> data->time_to_die)
+				{
+					pthread_mutex_lock(&data->print);
+					printf("%lld %d %s\n", gettime() - data->start_time,
+						data->philo_tab[i].philo_number + 1, "died");
+					data->alive = 0;
+					return (0);
+				}
 			}
 		}
 	}
