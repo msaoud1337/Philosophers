@@ -6,7 +6,7 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 13:39:39 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/07 19:06:42 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/08 18:46:44 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ void		action(int philo_id, long long time, char *action, t_data *data);
 void		ft_error(int i);
 int			ft_atoi(const char *str);
 long long	gettime(void);
-void		philo_mouve(int time, t_philosofers *philo, int stats);
 void		philo_dead(t_philosofers *philo);
 void		*checkingfordeath(void	*arg);
-void		ft_mutex_init(t_data *data);
-void		pars(int arc, char **arv, t_data *data);
+int			ft_mutex_init(t_data *data);
+int			pars(int arc, char **arv, t_data *data);
+void		ft_free(t_data	*data, int tmp);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 16:05:14 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/07 19:06:37 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/08 18:55:55 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ void	eat(t_philosofers *philo)
 	pthread_mutex_lock(&data->forks[philo->left_fork]);
 	action(philo->philo_number, philo->start_time, "has taken a fork", data);
 	action(philo->philo_number, philo->start_time, "is eating", data);
-	philo_mouve(data->time_to_eat, philo, 1);
+	philo->last_meal = gettime();
+	philo->is_eating = 1;
+	usleep(data->time_to_eat * 1000);
+	philo->is_eating = 0;
 	data->all_ate++;
 	pthread_mutex_unlock(&data->forks[philo->right_fork]);
 	pthread_mutex_unlock(&data->forks[philo->left_fork]);
@@ -40,10 +43,8 @@ void	*philosofers(void	*param)
 	while (data->alive)
 	{
 		eat(philo);
-		if (!data->alive)
-			break ;
 		action(philo->philo_number, philo->start_time, "is sleeping", data);
-		philo_mouve(data->time_to_sleep, philo, 0);
+		usleep(data->time_to_sleep * 1000);
 		action(philo->philo_number, philo->start_time, "is thinking", data);
 	}
 	return (0);
@@ -76,11 +77,10 @@ void	ft_thread_init(t_data *data)
 		data->philo_tab[i].start_time = gettime();
 		if (pthread_create(&data->philo_tab[i].philo_thread, NULL, &philosofers,
 				(void *)&data->philo_tab[i]))
-			ft_error(3);
+			return ;
 		pthread_mutex_init(&data->philo_tab[i].check, NULL);
 	}
-	if (pthread_create(&check, NULL, &checkingfordeath, (void *)data))
-		ft_error(3);
+	pthread_create(&check, NULL, &checkingfordeath, (void *)data);
 	pthread_join(check, NULL);
 }
 
@@ -89,9 +89,19 @@ int	main(int arc, char **arv)
 	t_data	data;
 
 	if (arc < 5 || arc > 6)
-		ft_error(0);
-	pars(arc, arv, &data);
+		return (0);
+	if (!pars(arc, arv, &data))
+	{
+		ft_free(&data, 0);
+		return (0);
+	}
 	ft_philo_init(&data);
-	ft_mutex_init(&data);
+	if (!ft_mutex_init(&data))
+	{
+		ft_free(&data, 0);
+		return (0);
+	}
 	ft_thread_init(&data);
+	ft_free(&data, 1);
+	return (0);
 }
