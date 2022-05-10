@@ -6,16 +6,12 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 13:43:30 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/08 16:35:53 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/10 11:35:04 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-long long	calcule_time(long long n, long long s)
-{
-	return (n - s);
-}
 
 void	action(int philo_id, long long time, char *action, t_data *data)
 {

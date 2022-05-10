@@ -6,7 +6,7 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 13:39:39 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/08 18:46:44 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/10 11:35:29 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,7 @@ typedef struct s_data
 	struct s_philosofers	*philo_tab;
 }	t_data;
 
-long long	calcule_time(long long n, long long s);
 void		action(int philo_id, long long time, char *action, t_data *data);
-void		ft_error(int i);
 int			ft_atoi(const char *str);
 long long	gettime(void);
 void		philo_dead(t_philosofers *philo);

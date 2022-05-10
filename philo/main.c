@@ -6,7 +6,7 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 16:05:14 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/08 18:55:55 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/09 14:48:45 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	ft_thread_init(t_data *data)
 		if (pthread_create(&data->philo_tab[i].philo_thread, NULL, &philosofers,
 				(void *)&data->philo_tab[i]))
 			return ;
-		pthread_mutex_init(&data->philo_tab[i].check, NULL);
 	}
 	pthread_create(&check, NULL, &checkingfordeath, (void *)data);
 	pthread_join(check, NULL);
