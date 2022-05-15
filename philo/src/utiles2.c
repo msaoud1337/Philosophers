@@ -6,7 +6,7 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 13:41:33 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/08 18:45:27 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/15 12:41:22 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@ int	ft_arv5(t_data *data)
 {
 	if (data->arc == 6)
 	{
-		if (data->all_ate == (data->each_time_toeat * data->all_philo))
+		if (data->all_ate >= (data->each_time_toeat * data->all_philo))
 		{
 			pthread_mutex_lock(&data->print);
-			printf("each philosopher ate at least %d", data->each_time_toeat);
+			printf("each philosopher ate at least %d", data->each_time_toeat);	
 			return (0);
 		}
 	}
 	return (1);
 }
 
-void	*checkingfordeath(void	*arg)
+void	checkingfordeath(void	*arg)
 {
 	t_data	*data;
 	int		i;
@@ -38,7 +38,7 @@ void	*checkingfordeath(void	*arg)
 		while (++i < data->all_philo && data->alive)
 		{
 			if (!ft_arv5(data))
-				return (0);
+				return ;
 			if (data->philo_tab[i].is_eating == 0)
 			{
 				if (gettime() - data->philo_tab[i].last_meal
@@ -47,12 +47,12 @@ void	*checkingfordeath(void	*arg)
 					pthread_mutex_lock(&data->print);
 					printf("%lld %d %s\n", gettime() - data->start_time,
 						data->philo_tab[i].philo_number + 1, "died");
-					return (0);
+					return ;
 				}
 			}
 		}
+		usleep(1000);
 	}
-	return (0);
 }
 
 int	ft_mutex_init(t_data *data)

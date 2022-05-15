@@ -6,7 +6,7 @@
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 16:05:14 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/09 14:48:45 by msaoud           ###   ########.fr       */
+/*   Updated: 2022/05/12 21:14:39 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	eat(t_philosofers *philo)
 	action(philo->philo_number, philo->start_time, "is eating", data);
 	philo->last_meal = gettime();
 	philo->is_eating = 1;
-	usleep(data->time_to_eat * 1000);
+	ft_usleep(data->time_to_eat);
 	philo->is_eating = 0;
 	data->all_ate++;
 	pthread_mutex_unlock(&data->forks[philo->right_fork]);
@@ -44,7 +44,7 @@ void	*philosofers(void	*param)
 	{
 		eat(philo);
 		action(philo->philo_number, philo->start_time, "is sleeping", data);
-		usleep(data->time_to_sleep * 1000);
+		ft_usleep(data->time_to_sleep);
 		action(philo->philo_number, philo->start_time, "is thinking", data);
 	}
 	return (0);
@@ -68,7 +68,6 @@ void	ft_philo_init(t_data *data)
 void	ft_thread_init(t_data *data)
 {
 	int			i;
-	pthread_t	check;
 
 	i = -1;
 	while (++i < data->all_philo)
@@ -79,8 +78,7 @@ void	ft_thread_init(t_data *data)
 				(void *)&data->philo_tab[i]))
 			return ;
 	}
-	pthread_create(&check, NULL, &checkingfordeath, (void *)data);
-	pthread_join(check, NULL);
+	checkingfordeath(data);
 }
 
 int	main(int arc, char **arv)

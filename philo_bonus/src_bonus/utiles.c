@@ -5,33 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msaoud <msaoud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/06 13:43:30 by msaoud            #+#    #+#             */
-/*   Updated: 2022/05/10 11:35:04 by msaoud           ###   ########.fr       */
+/*   Created: 2022/05/11 16:22:41 by msaoud            #+#    #+#             */
+/*   Updated: 2022/05/12 18:08:52 by msaoud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
-
-
-void	action(int philo_id, long long time, char *action, t_data *data)
-{
-	pthread_mutex_lock(&data->print);
-	printf("%lld %d %s\n", gettime() - time, philo_id + 1, action);
-	pthread_mutex_unlock(&data->print);
-}
-
-void	ft_error(int i)
-{
-	if (i == 0)
-		printf("check arguments !!!\n");
-	if (i == 1)
-		printf("allocation failed !!!\n");
-	if (i == 3)
-		printf("thread creation failed !!!\n");
-	if (i == 4)
-		printf("mutex failed !!!\n");
-	exit(0);
-}
+#include "header_bonus.h"
 
 int	ft_atoi(const char *str)
 {
@@ -58,6 +37,16 @@ int	ft_atoi(const char *str)
 	return (r * signe);
 }
 
+void	ft_usleep(int time)
+{
+	long long	stop_time;
+
+	stop_time = gettime() + time;
+	while (gettime() < stop_time)
+		usleep(50);
+	return ;
+}
+
 long long	gettime(void)
 {
 	long long		time;
@@ -67,4 +56,31 @@ long long	gettime(void)
 	time = curr_time.tv_sec * 1000;
 	time += curr_time.tv_usec / 1000;
 	return (time);
+}
+
+int	pars(int arc, char **arv, t_data *data)
+{
+	data->all_philo = ft_atoi(arv[1]);
+	data->time_to_die = ft_atoi(arv[2]);
+	data->time_to_eat = ft_atoi(arv[3]);
+	data->time_to_sleep = ft_atoi(arv[4]);
+	data->forks = malloc(sizeof(sem_t) * data->all_philo);
+	if (!data->forks)
+		return (0);
+	data->philo_tab = malloc(sizeof(t_philosofers) * data->all_philo);
+	if (!data->philo_tab)
+		return (0);
+	if (data->all_philo < 1 || data->time_to_die < 60
+		|| data->time_to_eat < 60 || data->time_to_sleep < 60)
+		return (0);
+	data->each_time_toeat = 0;
+	if (arv[5])
+		data->each_time_toeat = ft_atoi(arv[5]);
+	data->alive = 1;
+	data->all_ate = 0;
+	data->arc = arc;
+	data->pid_tab = malloc(sizeof(int) * data->all_philo);
+	if (!data->pid_tab)
+		return (0);
+	return (1);
 }
